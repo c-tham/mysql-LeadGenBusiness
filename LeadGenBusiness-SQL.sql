@@ -133,12 +133,13 @@ order by c.client_id
 #8. What query would you run to get a list of client names and the total # of leads we've generated for each of our clients' sites between January 1, 2011 to December 31, 2011? Order this query by client id.  
 #Come up with a second query that shows all the clients, the site name(s), and the total number of leads generated from each site for all time.
 
+
 #?????
 select concat(c.first_name, ' ',c.last_name) as client_name, s.domain_name, count(s.site_id) as cnt 
 from clients c
 join sites s on c.client_id = s.client_id
-join billing b on c.client_id = b.client_id
-where date_format(b.charged_datetime,'%Y%m%d') between '20110101' and '20111231'
+left join leads l on s.site_id = l.site_id
+where date_format(l.registered_datetime,'%Y%m%d') between '20110101' and '20111231'
 group by 1,2
 order by c.client_id
 ;
@@ -147,8 +148,8 @@ order by c.client_id
 select *
 from clients c
 join sites s on c.client_id = s.client_id
-join billing b on c.client_id = b.client_id
-where date_format(b.charged_datetime,'%Y%m%d') between '20110101' and '20111231'
+left join leads l on s.site_id = l.site_id
+where date_format(l.registered_datetime,'%Y%m%d') between '20110101' and '20111231'
 order by c.client_id
 ;
 
